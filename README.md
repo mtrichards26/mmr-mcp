@@ -26,6 +26,10 @@ You can switch transports without code changes using environment variables or CL
   - `MCP_HTTP_STATELESS`: `true|false`
 - CLI flags (override env): `--transport=`, `--host=`, `--port=`, `--path=`, `--json=`, `--stateless=`
 
+Notes:
+- Stdio mode emits no startup output to stdout/stderr.
+- HTTP mode prints effective configuration and a "Server started..." message to stdout.
+
 Examples:
 - Stdio (default):
   ```bash
@@ -41,6 +45,12 @@ Examples:
   ```bash
   php <path_to_mmr-mcp>/bin/mcp-server.php --transport=http --json=false --stateless=false
   ```
+
+### Logging
+- Uses Monolog with:
+  - Rotating file handler: `logs/mcp-out.log` (daily), keeping the last 5 files, level `DEBUG` and above
+  - STDERR handler: level `ERROR` and above
+- Ensure the `logs/` directory is writable by the process user.
 
 ### Usage (VS Code)
 - Install dependencies: `composer install`
