@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bootstrap;
 
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
@@ -16,13 +17,16 @@ final class LoggerFactory
         $logger = new Logger($channel);
 
         $logDir = __DIR__ . '/../../logs';
+        if (!is_dir($logDir)) {
+            @mkdir($logDir, 0775, true);
+        }
 
-        // File handler at INFO+; fallback silently if path cannot be opened
+        // Rotating file handler: daily logs, keep last 5 files
         try {
-            $fileHandler = new StreamHandler($logDir . '/mcp-out.log', Level::Info);
-            $logger->pushHandler($fileHandler);
+            $rotating = new RotatingFileHandler($logDir . '/mcp-out.log', 5, Level::Info);
+            $logger->pushHandler($rotating);
         } catch (\Throwable) {
-            // If file cannot be opened, we still have STDERR below
+            // If file cannot be opened, fallback only to STDERR
         }
 
         // STDERR handler at ERROR+
