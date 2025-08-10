@@ -21,31 +21,22 @@ try {
     $config = TransportConfig::fromEnvAndArgs($_ENV + getenv(), $_SERVER['argv'] ?? []);
     $transport = TransportFactory::make($config);
 
-    // Choose output stream: avoid STDOUT in stdio mode to prevent corrupting JSON-RPC frames
-    $outputStream = ($config->transport === TransportConfig::TRANSPORT_STDIO) ? STDERR : STDOUT;
-
-    // Print effective configuration
-    fwrite($outputStream, "MCP Server configuration:\n");
-    fwrite($outputStream, sprintf("  transport: %s\n", $config->transport));
+    // In HTTP mode, print effective configuration and a ready message to STDOUT
     if ($config->transport === TransportConfig::TRANSPORT_HTTP) {
-        fwrite($outputStream, sprintf("  host: %s\n", $config->host));
-        fwrite($outputStream, sprintf("  port: %d\n", $config->port));
-        fwrite($outputStream, sprintf("  path: %s\n", $config->path));
-        fwrite($outputStream, sprintf("  json_response: %s\n", $config->enableJsonResponse ? 'true' : 'false'));
-        fwrite($outputStream, sprintf("  stateless: %s\n", $config->stateless ? 'true' : 'false'));
-        fwrite($outputStream, "\n");
-    }
+        fwrite(STDOUT, "MCP Server configuration:\n");
+        fwrite(STDOUT, sprintf("  transport: %s\n", $config->transport));
+        fwrite(STDOUT, sprintf("  host: %s\n", $config->host));
+        fwrite(STDOUT, sprintf("  port: %d\n", $config->port));
+        fwrite(STDOUT, sprintf("  path: %s\n", $config->path));
+        fwrite(STDOUT, sprintf("  json_response: %s\n", $config->enableJsonResponse ? 'true' : 'false'));
+        fwrite(STDOUT, sprintf("  stateless: %s\n\n", $config->stateless ? 'true' : 'false'));
 
-    // Announce when ready
-    $transport->once('ready', function () use ($outputStream, $config): void {
-        if ($config->transport === TransportConfig::TRANSPORT_HTTP) {
+        $transport->once('ready', function () use ($config): void {
             $scheme = 'http';
             $base = sprintf('%s://%s:%d', $scheme, $config->host, $config->port);
-            fwrite($outputStream, sprintf("Server started and listening at %s%s\n", $base, $config->path));
-        } else {
-            fwrite($outputStream, "Server started and listening on stdio\n");
-        }
-    });
+            fwrite(STDOUT, sprintf("Server started and listening at %s%s\n", $base, $config->path));
+        });
+    }
 
     $server->listen($transport);
 } catch (\Throwable $e) {
