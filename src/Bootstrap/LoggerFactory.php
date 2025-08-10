@@ -23,7 +23,7 @@ final class LoggerFactory
 
         // Rotating file handler: daily logs, keep last 5 files
         try {
-            $rotating = new RotatingFileHandler($logDir . '/mcp-out.log', 5, Level::Info);
+            $rotating = new RotatingFileHandler($logDir . '/mcp-out.log', 5, Level::Debug);
             $logger->pushHandler($rotating);
         } catch (\Throwable) {
             // If file cannot be opened, fallback only to STDERR

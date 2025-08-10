@@ -15,6 +15,12 @@ This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP f
 - Select transport using `App\Config\TransportConfig` and `App\Transport\TransportFactory`
 - Run main loop; exit gracefully on transport close
 
+## Logging
+- Monolog logger is provided via `App\Bootstrap\LoggerFactory`
+  - Rotating file: `logs/mcp-out.log` (daily), keep 5 files, level `DEBUG+`
+  - STDERR: level `ERROR+`
+- Logger is injected into the server and available to handlers via the PSR-11 container
+
 ## Transport Selection (Config)
 - `TransportConfig` parses env + CLI args:
   - `MCP_TRANSPORT`: `stdio` (default) or `http`
@@ -67,7 +73,7 @@ This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP f
 ├─ bin/
 │  └─ mcp-server.php            # entrypoint (transport selection via env/args)
 ├─ src/
-│  ├─ Bootstrap/ServerFactory.php
+│  ├─ Bootstrap/LoggerFactory.php
 │  ├─ Config/TransportConfig.php
 │  ├─ Transport/TransportFactory.php
 │  ├─ Domain/Clock/ClockInterface.php
