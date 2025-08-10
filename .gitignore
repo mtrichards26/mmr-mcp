@@ -1,0 +1,27 @@
+# PHP / Composer
+/vendor/
+composer.lock
+composer.phar
+
+# Env config
+.env
+.env.*
+!.env.example
+
+# PHPUnit
+.phpunit.result.cache
+coverage/
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Tools cache
+.php-cs-fixer.cache
