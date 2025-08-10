@@ -1,6 +1,6 @@
 ### MCP PHP Server — Architecture Overview
 
-This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP framework with stdio transport. It exposes a single tool `time.now` that returns the current time for a requested IANA time zone. The design favors separation of concerns, testability, and protocol-compliant error handling.
+This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP framework with stdio transport. It exposes a single tool `time-now` that returns the current time for a requested IANA time zone. The design favors separation of concerns, testability, and protocol-compliant error handling.
 
 ## Runtime & Transport
 - **PHP**: 8.2+ (Composer, PSR-4 autoload)
@@ -26,7 +26,7 @@ This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP f
 - CLI flags (override env): `--transport=`, `--host=`, `--port=`, `--path=`, `--json=`, `--stateless=`
 - `TransportFactory` builds either `StdioServerTransport` or `StreamableHttpServerTransport` using the parsed config
 
-## Tool: `time.now`
+## Tool: `time-now`
 - **Purpose**: Return current time for a given IANA time zone
 - **Input schema**: `{ timeZone: string }` (required), example "America/New_York"
 - **Output schema**: `{ time: string }` where `time` is ISO-8601 (`DateTimeImmutable::ATOM`)
@@ -91,7 +91,7 @@ This outlines a simple MCP (Model Context Protocol) server in PHP using an MCP f
 ## MCP Flow (Happy Path)
 1. Client launches server over stdio OR connects to HTTP endpoint
 2. Client sends `initialize`; server returns metadata and tool descriptors
-3. Client calls `tools/call` for `time.now`
+3. Client calls `tools/call` for `time-now`
 4. Server validates, invokes tool, returns `{ time }` or structured error
 5. Server exits when stdin closes (stdio) or transport stops (HTTP)
 

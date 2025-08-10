@@ -8,7 +8,7 @@ A minimal MCP (Model Context Protocol) server implemented in PHP that communicat
 - Protocol: MCP (JSON-RPC-style requests/responses)
 
 ### Exposed Tools
-- **time.now**
+- **time-now**
   - **Input**: `{ timeZone: string }` (required). Example: "America/New_York"
   - **Output**: `{ time: string }` — ISO-8601 timestamp (`DateTimeImmutable::ATOM`).
   - **Behavior**: Validates the time zone and returns the current time for that zone; returns a structured error for invalid zones.
