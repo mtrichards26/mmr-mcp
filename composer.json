@@ -1,10 +1,11 @@
 {
     "name": "mtrichards26/mmr-mcp",
-    "description": "MCP stdio server (PHP) exposing time.now tool",
+    "description": "MCP stdio server (PHP) exposing time-now tool",
     "type": "project",
     "license": "MIT",
     "require": {
-        "php-mcp/server": "^3.0"
+        "php-mcp/server": "^3.0",
+        "monolog/monolog": "^3.6"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
